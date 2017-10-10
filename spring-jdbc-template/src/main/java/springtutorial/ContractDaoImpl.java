@@ -20,8 +20,8 @@ public class ContractDaoImpl implements ContractDao{
 
     public Contract getContract(int pId)
     {
-        String sql = "SELECT * FROM contracts WHERE id=" + 1;
-        return  _jdbcTemplate.queryForObject(sql, new ContractMapper());
+        String sql = "SELECT * FROM contracts WHERE id=(?)";
+        return  _jdbcTemplate.queryForObject(sql, new ContractMapper(), pId);
     }
 
     public List<Contract> getAllContracts()
@@ -32,7 +32,7 @@ public class ContractDaoImpl implements ContractDao{
     
     public void suspendContract(int pId)
     {
-        String sql = "UPDATE contracts SET status='suspended' WHERE id=" + 1;
-        _jdbcTemplate.update(sql);
+        String sql = "UPDATE contracts SET status='suspended' WHERE id=(?)";
+        _jdbcTemplate.update(sql, pId);
     }
 }

@@ -3,15 +3,14 @@ package springtutorial;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.springframework.stereotype.Component;
 
-@Component
 public class DatabaseManager {
 
     private static String INITIALIZE_URL = "jdbc:derby:testdb;create=true";
@@ -91,5 +90,23 @@ public class DatabaseManager {
                 _logger.log(Level.SEVERE, e.getMessage(), e);
             }
         }
+    }
+    
+    public void queryCarPrice(String pName)
+    {
+        String sql = "SELECT * FROM CARS WHERE NAME=\'" + pName + "\'";
+        _logger.info(sql);
+        try(PreparedStatement st = _connection.prepareStatement(sql);)
+        {
+            ResultSet resultSet = st.executeQuery();
+            while(resultSet.next())
+            {
+                _logger.info(resultSet.getString("name") + " price is: " + resultSet.getString("price"));
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        } 
     }
 }
